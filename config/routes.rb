@@ -5,7 +5,9 @@ Rails.application.routes.draw do
       resources :users, only: [:create] do 
         get :current, on: :collection 
       end
-      resources :albums
+      resources :albums do
+        delete '/pictures/:id', to: 'albums#destroyPics'
+      end
     end
   end
 end

@@ -38,8 +38,6 @@ module DemoApi
     config.middleware.use ActionDispatch::Session::CookieStore, key: '_coookie_name', expire_after: 30.days
 
     config.generators.system_tests = nil
-    config.active_storage.variant_processor = :vips
-    config.active_storage.replace_on_assign_to_many = false
 
     config.generators do |g|
       g.helper = false

@@ -1,11 +1,10 @@
 class Api::V1::AlbumsController < ApplicationController
-    before_action :authenticate_user!
     before_action :find_album, only: [:show, :update, :destroy]
 
     def create
         album = Album.new album_params
         album.user = current_user
-        if album.save
+        if album.save!
             render json: { id: album.id }
         else
             render json: { errors: album.errors.full_messages}, status: 422 
@@ -24,16 +23,24 @@ class Api::V1::AlbumsController < ApplicationController
     end
 
     def update
-        if @album.update album_params
-            render json: { id: @album.id }
-        else
-            render json: { errors: @album.errors.full_messages}, status: 422
-        end
+        @album.update!(album_params)
+        render(
+            json: @album 
+        )
     end
 
     def destroy
         @album.destroy
         render(json: { status: 200 }, status: 200)
+    end
+
+    def destroyPics
+        @album = Album.find params[:album_id]
+        @picture = ActiveStorage::Attachment.find(params[:id])
+        @picture.purge
+        render(
+            json: @album         
+        )
     end
 
     private
@@ -44,11 +51,10 @@ class Api::V1::AlbumsController < ApplicationController
 
     def album_params
         params
-        .require(:album)
         .permit(
             :title, 
             :description,
-            pictures: []
+            :pictures
         )
     end
 end
