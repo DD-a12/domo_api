@@ -1,6 +1,7 @@
 class Api::V1::UsersController < ApplicationController
     before_action :find_user, only: [:update, :destory]  
-  
+    before_action :authenticate_user!, except: [:create]
+
     def current
       render json: current_user
     end

@@ -54,7 +54,7 @@ class Api::V1::AlbumsController < ApplicationController
         .permit(
             :title, 
             :description,
-            :pictures
+            pictures: []
         )
     end
 end
